@@ -1,0 +1,68 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load uni_form_tags %}
+
+{% block extra_head_base %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}js/captcha/jquery.buttonCaptcha.styles.css" />
+    {% block extra_head %}{% endblock %}
+{% endblock %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Registrar" %}</h1>
+
+    {% if user.is_authenticated %}
+        <p>{% trans "Você já efetuou seu registro." %}</p>
+    {% else %}
+        <p>{% trans "Já possui uma conta?" %} <a href="{% url acct_login %}">{% trans "Entre" %}</a>!</p>
+        <form class="signup uniForm" id="signup_form" method="post" action="{% url acct_signup %}">
+            {% csrf_token %}
+            <fieldset class="inlineLabels">
+                {{ form|as_uni_form }}
+                {% if redirect_field_value %}
+                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                
+                <div class="form_block">
+                    <input type="submit" value="{% trans "Enviar" %}" />
+                </div>
+            </fieldset>
+        </form>
+        {% url terms as terms_url %}
+        {% url privacy as privacy_url %}
+        <p>{% blocktrans %}Ao clicar em "Enviar", você indica que leu e concorda com os <a href="{{ terms_url }}">Termos de Uso</a> e <a href="{{ privacy_url }}">Política de Privacidade</a>.{% endblocktrans %}</p>
+        
+        <p>{% blocktrans %}Se você tiver qualquer problema criando sua conta, entre em contato conosco <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</p>
+        
+        {# @@@ currently OpenID signup is not supported via signup codes #}
+        {% if not code %}
+            <p>Se você tiver um OpenID, <a href="{% url acct_login %}">faça o registro</a> usando seu OpenID para começar a utilizá-lo</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block extra_body %}
+    {% load jquery_validation %}
+    {% include_validation %}
+    <script type="text/javascript">
+        $(function(){
+            //$('#signup_form').validate('{% url signup_form_validate %}', {type: 'table', fields: ['username'], dom: $('#id_username'), event: 'change'});
+            $("#id_username").focus();
+        });
+    </script>
+    <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/jquery/jquery-ui-1.8.14.custom.min.js"></script>
+    <script type="text/javascript" language="javascript" src="{{ STATIC_URL }}js/captcha/jquery.buttonCaptcha.min.js"></script>
+    <script type="text/javascript">
+	    $(document).ready(function() {
+	    	$(".form_block input").buttonCaptcha({
+	    	                                        codeWord:'WEB',
+	    	                                        codeZone:'talentos.com.br',
+	    	                                        captchaHeader:'Clique aqui',
+		                                            captchaTip:'Mova as letras da esquerda para a direita, para montar a palavra "%code_word%". Obrigado!',
+		                                            captchaUnlocked:'Entre!',
+	    	                                        });
+	    });
+	</script>
+{% endblock %}

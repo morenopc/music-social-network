@@ -1,0 +1,44 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load avatar_tags %}
+
+{% block head_title %}{% trans "Foto do perfil" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Foto do perfil" %}</h1>
+    <h3>{% trans "Sua foto do perfil:" %}</h3>
+  {% avatar user 80 %}
+  {% if not avatars %}
+        <h3>Seu perfil não foi encontrado no <a href="http://www.gravatar.com/">Gravatar</a>, mas você pode enviar uma foto no formulário abaixo.</h3>
+        <p>( Sua foto somente será mostrada se você <a href="{% url acct_email%}">confirmou seu email</a>. )</p>
+    {% else %}
+        <h3>Selecione uma foto de perfil diferente:</h3>
+        <p>( Sua foto somente será mostrada se você <a href="{% url acct_email%}">confirmou seu email</a>. )</p>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <ul class="avatar_choices">
+                {{ primary_avatar_form.choice }}
+            </ul>
+            <input type="submit" value="Mudar" />
+        </form>
+        {% url avatar_delete as avatar_delete_url %}
+        <p>{% blocktrans %}Não gostou? Escolha <a href="{{ avatar_delete_url }}">o que quer apagar</a>.{% endblocktrans %}</p>
+    {% endif %}
+    <p>
+    <form enctype="multipart/form-data" method="POST" action="">
+        {% csrf_token %}
+        <label for="avatar">{% trans "Enviar foto do perfil:" %}</label>
+        <input type="file" name="avatar" value="{% trans "Foto do perfil" %}" />
+        <input type="submit" value="{% trans "Enviar nova foto" %}" />
+    </form>
+    </p>
+{% endblock %}
+
+{% block extra_body %}
+    {% load jquery_validation %}
+    {% include_validation %}
+    <script type="text/javascript">
+       <!-- nothing here -->
+    </script>
+{% endblock %}

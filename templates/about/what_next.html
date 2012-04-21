@@ -1,0 +1,52 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+
+{% block head_title %}{% trans "Próximo passo?" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Procurado o próximo passo?" %}</h1>
+    
+    {% if user.is_authenticated %}
+        <p>Aqui estão algumas coisas a fazer para começar a usar este site:</p>
+        
+        <dl class="what_next">
+            <dt><a href="{% url acct_email %}">verificar um endereço de e-mail</a></dt>
+            <dd>assim você pode receber notificações, redefinir sua senha e que as pessoas possam encontrá-lo mais facilmente.</dd>
+            
+            <dt><a href="{% url profile_detail user.username %}">preencha o seu perfil</a></dt>
+            <dd>para dizer ao mundo um pouco sobre você.</dd>
+            
+            <dt><a href="{% url avatar_change %}">adicionar uma foto ao seu perfil</a></dt>
+            <dd>assim as pessoas podem ver como você é.</dd>
+            
+            <dt><a href="{% url tribe_list %}">se juntar a algum tribo</a></dt>
+            <dd>para encontrar pessoas com interesses semelhantes, compartilhar e discutir.</dd>
+            
+            <dt><a href="{% url profile_list %}">se conectar com amigos</a></dt>
+            <dd>para que você possa acompanhar o que estão fazendo.</dd>
+            
+            {% ifsetting ACCOUNT_OPEN_SIGNUP %}
+                <dt><a href="{% url invitations %}">convidar mais pessoas para o site</a></dt>
+                <dd>para que mais pessoas possam participar da diversão.</dd>
+            {% else %}
+                {% if user.is_staff %}
+                    <dt><a href="{% url admin_invite_user %}">convidar mais pessoas para o site</a> [admin only]</dt>
+                    <dd>para que mais pessoas possam participar da diversão.</dd>
+                {% endif %}
+            {% endifsetting %}
+        </dl>
+        {% else %}
+            {% url acct_login as login_url %}
+            
+            <p class="what_next">
+                {% ifsetting ACCOUNT_OPEN_SIGNUP %}
+                    {% url acct_signup as signup_url %}
+                    {% blocktrans %}Comece por <a href="{{ signup_url }}">registre-se</a> ou entre <a href="{{ login_url }}">aqui</a>.{% endblocktrans %}
+                {% else %}
+                    {% blocktrans %}Comece por <a href="{{ login_url }}">aqui</a>.{% endblocktrans %}
+                {% endifsetting %}
+            </p>
+        {% endif %}
+{% endblock %}

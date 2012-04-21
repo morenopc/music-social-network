@@ -1,0 +1,18 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load group_tags %}
+
+{% block body_class %}Fotos{% endblock %}
+
+{% block subnav %}
+    {% if user.is_authenticated %}
+        <ul>
+            <li><a href="/dev/videos">{% trans "Seus vídeos" %}</a></li>
+            <li><a href="{% groupurl photos group %} ">{% trans "Últimos vídeos enviados" %}</a></li>
+            <li><a href="{% groupurl photo_upload group %}">{% trans "Enviar vídeo" %}</a></li>
+        </ul>
+    {% else %}
+        &nbsp;
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% load comments %}
+{% load avatar_tags %}
+
+<div id="comment-form" class="comment-form">
+  <h3>Adicionar novo comentário</h3>
+  {% get_comment_form for video as form %}
+  <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+    {{ form.comment }}
+    <div style="display:none">
+      <input id="id_name" type="text" name="name" maxlength="50" value="{%if user.first_name%}{{ user.first_name|add:' ' }}{%endif%}{{ user.last_name }}">
+      <input type="text" name="email" id="id_email" value="{{ user.email }}">
+      {{ form.honeypot }}
+      {{ form.content_type }}
+      {{ form.object_pk }}
+      {{ form.timestamp }}
+      {{ form.security_hash }}
+    </div>
+    <div>
+      <input type="submit" name="submit" value="Comentar">
+    </div>
+  </form>
+</div>
+<!-- ajax-next-comment -->
+<hr />
+<div id="comments"></div>
+ {% get_comment_list for video as cmt_list %}
+ <TABLE border="0"
+   {% for comment in cmt_list reversed %}
+     <TR><TD><img {%if comment.user%}src="{% avatar_url comment.user 40 %}" alt="{{ comment.name }}"{%else%}src="{{ STATIC_URL }}img/ajaxcomments/jimihendrix35x35.jpg" alt="jimi"{%endif%} /><TD><strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ comment.name }}&nbsp;:</strong>
+     <TR><TD><TD>&nbsp;&nbsp;&nbsp;&nbsp;{{ comment.comment }}
+     <TR><TD><TD>&nbsp;&nbsp;&nbsp;&nbsp;<small>{{ comment.submit_date|date:"d M Y H:i" }}</small>
+     <hr />
+   {% endfor %}
+ </TABLE>

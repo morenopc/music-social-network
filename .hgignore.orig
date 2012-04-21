@@ -1,0 +1,13 @@
+#use glob syntax.
+syntax: glob
+
+*.pyc
+*~
+*.wsgi
+*.db
+settings.py
+send.sh
+
+syntax: regexp
+^avatars/
+^photologue/

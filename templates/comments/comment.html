@@ -1,0 +1,10 @@
+{% load comments %}
+{% load avatar_tags %}
+<div class="comment">
+ <TABLE border="0"
+   <TR><TD><img {%if comment.user%}src="{% avatar_url comment.user 40 %}" alt="{{ comment.name }}"{%else%}src="{{ STATIC_URL }}img/ajaxcomments/jimihendrix35x35.jpg" alt="jimi"{%endif%} /><TD><strong>&nbsp;&nbsp;&nbsp;&nbsp;{{ comment.name }}&nbsp;:</strong>
+   <TR><TD><TD>&nbsp;&nbsp;&nbsp;&nbsp;{{ comment.comment }}
+   <TR><TD><TD>&nbsp;&nbsp;&nbsp;&nbsp;<small>{{ comment.submit_date|date:"d M Y H:i" }}</small>
+   <hr />
+ </TABLE>
+</div>

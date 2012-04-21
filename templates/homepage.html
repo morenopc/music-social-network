@@ -1,0 +1,244 @@
+{% extends "site_base_free.html" %}
+
+{% load i18n %}
+{% load ifsetting_tag %}
+{% load comments %}
+{% load comments_tag %}
+{% load avatar_tags %}
+{% load photo_tags %}
+
+{% block extra_head_base %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/homepage/homepage.css" />
+    <style type="text/css">
+    #moreright ul {
+    list-style-type: none; 
+    -webkit-padding-start: 0px;
+    }
+    .chartslabel{display:none;}
+	</style>
+
+    {% block extra_head %}{% endblock %}
+{% endblock %}
+
+{% block head_title %}{% trans "Bem-vindo" %}{% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block body %}
+<!-- Player extra scripts -->
+<script src="http://www.google.com/jsapi"></script>
+<script>google.load("swfobject", "2.1");</script><!-- YouTube -->
+<script type="text/javascript"> google.load('visualization', '1', {packages: ['corechart']});</script><!-- Charts -->
+
+<script type="text/javascript">
+var jsPlaylist=[{{ jsPlaylist|safe }}];
+var video_id='';
+//var json={{ json }};
+
+function updateHTML(elmId, value) {
+  document.getElementById(elmId).innerHTML = value;
+}
+
+function setytplayerState(newState) {
+    //updateHTML("playerstate", newState);
+}
+
+function onYouTubePlayerReady(playerId) {
+  ytplayer = document.getElementById("myytplayer");
+  //setInterval(updateytplayerInfo, 250);
+  //updateytplayerInfo();
+  ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+  ytplayer.addEventListener("onError", "onPlayerError");
+}
+
+function onytplayerStateChange(newState) {
+  setytplayerState(newState);
+  if(ytplayer.getPlaylistIndex() >= 0){
+    video_id=jsPlaylist[ytplayer.getPlaylistIndex()];
+    $('input#index_result').val(ytplayer.getPlaylistIndex());
+    $('input#video_id_result').val(video_id);
+    if(newState==-1){// Info and comments change
+      change_video_info(video_id);
+      $('div#comment-content').hide('slow');
+    }
+  }
+  else{
+      video_id=jsPlaylist[0];
+      $('input#index_result').val(0);
+      $('input#video_id_result').val(video_id);
+      
+  }
+  if(newState==0){
+    location.reload();// jQuery reload
+  }
+}
+
+function onPlayerError(errorCode) {
+  alert("An error occured: " + errorCode);
+}
+
+function getPlayerState() {
+  if (ytplayer) {
+    return ytplayer.getPlayerState();
+  }
+}
+
+</script>
+<div id="homepage">
+  <div id="homepage2"> 
+	<div id="homepagenav"> 
+		<h3>Guia de canais</h3>
+		<ul>
+		    <li><a href="/dev/">Top 30</a></li>
+		    {% for categoria in menu %}
+		        <li><a href="/dev/?op={{ forloop.counter }}">{{ categoria.0 }}</a></li>
+		    {% endfor %}
+		</ul>
+	</div>
+	<div id="moreright">
+	    <table id="stats" class="top5">
+            <caption>Top 5</caption>
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Popularity</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td>100</td>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% if total_votos > 0 %}
+                <tr>
+                    <td>{{ musicas.0.mnome }} ({{ musicas.0.mautor }})</td>
+                    <td>{{ musicas.0.votos }}</td>
+                </tr>
+                <tr>
+                    <td>{{ musicas.1.mnome }} ({{ musicas.1.mautor }})</td>
+                    <td>{{ musicas.1.votos }}</td>
+                </tr>
+                <tr>
+                    <td>{{ musicas.2.mnome }} ({{ musicas.2.mautor }})</td>
+                    <td>{{ musicas.2.votos }}</td>
+                </tr>
+                <tr>
+                    <td>{{ musicas.3.mnome }} ({{ musicas.3.mautor }})</td>
+                    <td>{{ musicas.3.votos }}</td>
+                </tr>
+                <tr>
+                    <td>{{ musicas.4.mnome }} ({{ musicas.4.mautor }})</td>
+                    <td>{{ musicas.4.votos }}</td>
+                </tr>
+                {% else %}
+                    <tr>
+                        <div>Não há votos registrados</div>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+	</div>
+	<div id="homepagecontent">
+	  <div id="player">
+	    <h2>{{ titulo }}</h2> 
+		  <p>
+		    <!-- Embedded player --> 
+            <div id="ytapiplayer">Você precisa instalar o Flash player 8+ e ativar o JavaScript para assistir esse vídeo.</div> 
+            <script type="text/javascript"> 
+              // <![CDATA[
+         
+              // allowScriptAccess must be set to allow the Javascript from one 
+              // domain to access the swf on the youtube domain
+              var params = { allowScriptAccess: "always", bgcolor: "#cccccc" };
+              // this sets the id of the object or embed tag to 'myytplayer'.
+              // You then use this id to access the swf and make calls to the player's API
+              var atts = { id: "myytplayer" };
+              swfobject.embedSWF("http://www.youtube.com/e/{{ player.video_id }}?enablejsapi=1&playerapiid=ytplayer?version={{ player.version }}&autohide={{ player.autohide }}&autoplay={{ player.autoplay }}&border={{ player.border }}{{ player.cc_load_policy }}&color1={{ player.color1 }}&color2={{ player.color2 }}&controls={{ player.controls }}&disablekb={{ player.disablekb }}&egm={{ player.egm }}&fs={{ player.fs }}&hd={{ player.hd }}&iv_load_policy={{ player.iv_load_policy }}&loop={{ player.loop }}&modestbranding={{ player.modestbranding }}&origin={{ player.origin }}&playerapiid={{ player.playerapiid }}&playlist={{ player.playlist }}&rel={{ player.rel }}&showinfo={{ player.showinfo }}&showsearch={{ player.showsearch }}&start={{ player.start }}", 
+                                 "ytapiplayer", "{{ player.width }}", "{{ player.height }}", "8", null, null, params, atts);
+              //]]>
+            </script>
+          </p>
+        </div>
+          <div class="info-comments" id="info-comments" style="width:{{ player.width }}px;">
+            <!-- info -->
+            <div id="info-ajax">
+	            <TABLE border="0"
+                  <TR><TD rowspan="5"><img src="{% avatar_url video.perfil 80 %}" alt="{{video.perfil.user.first_name}} {{video.perfil.user.last_name}}" class="photo" /><TD style="font-size:20px;color=#333;padding:0.1em 0em 0.25em 0.5em;"><a href="{% url profile_detail video.perfil %}" style="text-decoration: none;">{{video.perfil.user.first_name}} {{video.perfil.user.last_name}}</a>
+                  <TR><TD style="font-size:16px;padding-left:0.55em;"><a href="{% url videos video.perfil.user.id video.video_id %}">{{video.mnome}}&nbsp;-&nbsp;{{video.mautor}}</a>
+                  <TR><TD style="font-style:italic;padding-left:0.55em;">música&nbsp;{{video.mautoria}}
+                  <TR><TD style="font-style:italic;padding-left:0.55em;">{{video.estilo}}-{{video.categoria}}
+                </TABLE>
+	            <hr />
+	            <div>
+	              <a href="#comentarios" onclick="JavaScript:open_comments(video_id);">{% get_comment_count for video as commentcount %} {{ commentcount }} Comentário{{ commentcount|pluralize }}</a>&nbsp;&nbsp;
+                <span id="votes"></span>
+                  <a href="#votar" onclick="JavaScript:vote(video_id);">Votar</a>&nbsp;&nbsp;
+                  <span id="vote_result"></span>
+	            </div>
+            </div>
+            <!-- comments -->
+            <div id="comment-content">
+              <!-- comment-form -->
+              <div id="comment-ajax-content"></div>
+            </div>
+            <!--
+            <div>
+		        Player state: <span id="playerstate">--</span> 
+	            <input id="index_result" type="text" />
+	            VIDEO_ID 
+	            <input id="video_id_result" type="text" />
+	        </div>
+	        -->
+	        <div id="homepagecleardiv"></div>
+          </div> 
+        </div> 
+      </div>
+    </div>>
+{% endblock %}
+   
+{% block extra_body %}
+<script src="{{ STATIC_URL }}js/homepage/homepage.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/charts/jquery.charts.js" type="text/javascript" language="javascript"></script>
+<script src="{{ STATIC_URL }}js/ajaxcomments/post-comment.js" type="text/javascript"></script>
+<script type="text/javascript">
+//AjaxComments
+$(document).ready(function() {
+    media='{{ STATIC_URL }}'
+    media=media.substring(0, media.length-1);
+    $('div.comment-form form').live('submit', function() {
+        if(!$('input#id_name').val()){
+            $('input#id_name').val('Anônimo');
+        }
+        if(!$('input#id_email').val()){
+            $('input#id_email').val('anonimo@mail.com');
+        }
+        ajaxComment({'media': media});
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+    $("#stats").charts({ globaltotalValue: {{ total_votos }} });
+
+function change_video_info(video_id) {
+   $.ajax({
+      url: '/dev/'+video_id+'/videoinfo/',
+      async: false,
+      success: function(data) {
+         $('div#info-ajax').html(data);}
+   });
+}
+function open_comments(video_id){
+   $.ajax({
+      url: '/dev/'+video_id+'/comentario/',
+      async: false,
+      success: function(data) {
+         $('div#comment-ajax-content').html(data);
+         $('div#comment-content').show('fast');
+         }
+   });
+}
+</script>
+{% endblock %}

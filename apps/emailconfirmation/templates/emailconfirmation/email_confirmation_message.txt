@@ -1,0 +1,21 @@
+{% load i18n %}{% blocktrans with current_site.name as site_name %}
+Ola {{ user }},
+
+Recebemos uma solicitação para que este endereço de e-mail participe da rede social {{ site_name }}. 
+Para que possamos completar seu castro, precisamos da sua confirmação.
+
+Para participar desta rede social, clique no link de confirmação abaixo:
+
+{{ activate_url }}
+
+Isso levara você diretamente a uma página de confirmação de e-mail. Caso isso
+não ocorra, copie e cole o link completo acima na caixa de endereço do seu navegador
+e pressione a tecla "Enter".
+
+Se voce tiver perguntas relativas a esta rede social entre em contato conosco pelo e-email sac@webtalentos.com.br.
+
+Atenciosamente,
+
+Equipe Web Talentos
+
+{% endblocktrans %}

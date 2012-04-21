@@ -1,0 +1,15 @@
+{% load comments %}
+{% load avatar_tags %}
+<TABLE border="0"
+  <TR><TD rowspan="5"><img src="{% avatar_url video.perfil 80 %}" alt="{{video.perfil.user.first_name}} {{video.perfil.user.last_name}}" class="photo" /><TD style="font-size:20px;color=#333;padding:0.1em 0em 0.25em 0.5em;"><a href="{% url profile_detail video.perfil %}" style="text-decoration: none;">{{video.perfil.user.first_name}} {{video.perfil.user.last_name}}</a>
+  <TR><TD style="font-size:16px;padding-left:0.55em;"><a href="{% url videos video.perfil.user.id video.video_id %}">{{video.mnome}}&nbsp;-&nbsp;{{video.mautor}}</a>
+  <TR><TD style="font-style:italic;padding-left:0.55em;">música&nbsp;{{video.mautoria}}
+  <TR><TD style="font-style:italic;padding-left:0.55em;">{{video.estilo}}-{{video.categoria}}
+</TABLE>
+<hr />
+<div>
+  <a href="#comentarios" onclick="JavaScript:open_comments(video_id);">{% get_comment_count for video as commentcount %} {{ commentcount }} Comentário{{ commentcount|pluralize }}</a>&nbsp;&nbsp;
+<span id="votes"></span>
+  <a href="#votar" onclick="JavaScript:vote(video_id);">Votar</a>&nbsp;&nbsp;
+  <span id="vote_result"></span>
+</div>

@@ -1,0 +1,1 @@
+{% load i18n %}{% blocktrans with current_site.name as site_name %}Confirme seu e-mail para {{ site_name }}{% endblocktrans %}

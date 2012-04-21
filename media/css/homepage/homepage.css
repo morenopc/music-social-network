@@ -1,0 +1,104 @@
+div.info-comments
+{
+	margin-left: 100px;
+	margin-right: 200px;
+	/*background-color: #aaa;*/
+}
+
+textarea#id_comment
+{
+	width: 645px;
+	height: 92px;
+}
+div#homepage
+{
+	background-repeat: repeat-y;
+}
+
+div#homepage2
+{
+	background-repeat: repeat-y;
+	background-position: right;
+}
+
+div#homepagenav
+{
+	float: right;
+	width: 190px;
+	padding-top: 2em;
+}
+
+div#homepagenav ul
+{
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+div#homepagenav ul li { margin-top: 4px; }
+
+#homepagenav ul li a
+{
+	display: block;
+	width: 135px;
+	padding: 3px 5px 3px 10px;
+	text-decoration: none;
+	color: #000;
+	background-repeat: repeat-y;
+}
+
+#homepagenav ul li a:hover
+{
+	color: #fff;
+	background-color: #ccc;
+	background-repeat: repeat-y;
+}
+
+div#moreright
+{
+	float: left;
+	width: 190px;
+	margin: 0;
+	padding: 2em 10px 0 120px;
+	color: #000;
+	/*background-color:#0f0;*/
+}
+
+div#moreright h3
+{
+	margin-top: 0;
+	color: #000;
+	padding: .2em;
+	background-position: right;
+	background-repeat: repeat-y;
+}
+
+div#homepagecontent
+{
+	margin-left: 220px;
+	margin-right: 200px;
+	/*background-color: #aaa;*/
+}
+
+div#homepagecontent h2
+{
+	font-size: 2em;
+	color: #036;
+	margin: 0;
+	padding-top: 1em;
+	font-weight: normal;
+}
+
+div#homepagecontent { line-height: 150%; }
+
+#homepagecleardiv
+{
+	clear: both;
+	height: 1em;
+}
+
+div#playercontent{
+    margin:auto;
+    width:60%;
+    /*background-color:#b0e0e6;*/
+}

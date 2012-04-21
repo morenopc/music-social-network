@@ -1,0 +1,12 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Verifique seu endereço de e-mail" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Verifique seu endereço de e-mail" %}</h1>
+    
+    <p>{% blocktrans %}Enviamos um e-mail de verificação para <b>{{ email }}</b>. Siga as instruções no e-mail clicando no link enviado para finalizar seu registro. Se você não receber o e-mail em alguns minutos, entre em contato conosco pelo e-email <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endblocktrans %}</p>
+    <p><a href="{{ success_url }}">Voltar</a></p>
+{% endblock %}

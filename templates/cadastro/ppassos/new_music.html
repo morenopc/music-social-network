@@ -1,0 +1,59 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load account_tags %}
+{% load uni_form_tags %}
+
+{% block head_title %}{% trans "Primeiro passo" %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Músicas" %}</h1>
+    <p>Continue e siga três passos para completar seu cadastro</p>
+    {{ mensagem_erro|safe }}
+    <div>
+    <h1>Primeiro passo</h1>
+    <form class="signup uniForm" id="signup_form" method="post" action="/dev/cadastro/musicas/">
+        {% csrf_token %}
+        <fieldset class="inlineLabels">
+            {{ form|as_uni_form }}
+            <div class="form_block">
+                <input type='submit' value="Salvar"/>
+                <input type=button onClick="location.href='/dev/cadastro/fotos/'" value='Pular'>
+            </div>
+        </fieldset>
+    </form>
+    </div>
+{% endblock %}
+{% block extra_body %}
+    <script type="text/javascript">
+    var regex = /(youtube.com\/watch\?v=|youtube.com\/embed\/|youtu.be\/|youtube-nocookie.com\/v\/|youtube.com\/v\/|youtube.com\/.*\?v=)/gi;
+    var regex2 = /(youtube.com\/watch\?v=.{11}|youtube.com\/embed\/.{11}|youtu.be\/.{11}|youtube-nocookie.com\/v\/.{11}|youtube.com\/v\/.{11}|youtube.com\/.*\?v=.{11})/gi;
+    var videoid='';
+	$(function(){
+        //$('input#id_submit').click(function() {
+        $('input#id_video').change(function() {
+            var input=$('input#id_video').val();
+            if(regex.test(input)){
+                var n=input.match(regex);
+                if(n.length==1){
+                    var c=input.match(regex2);
+                    if(c.length==1){
+                        videoid=c[0].replace(n[0],"");
+                        //alert('C'+c[0]+' N'+n[0]);
+                        //$('p#hint_id_video').replaceWith("<p id='hint_id_video' class='formHint'>Ok</p>");
+                        $('input#id_video_id').val(videoid);
+                        $('input#id_video').css({'border-style':'solid','border-width':'1px','border-color':'#008000'});
+                        //videoid='';
+                        //$('form#signup_form').submit();
+                    }
+                }
+            }
+            else{
+                $('input#id_video').css({'border-style':'solid','border-width':'1px','border-color':'#FF6666'});
+                $('p#hint_id_video').replaceWith("<p id='hint_id_video' class='formHint'>Vídeo inválido</p>");
+            }
+        });
+    });
+	</script>
+{% endblock %}
+

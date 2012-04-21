@@ -1,0 +1,26 @@
+{% extends "site_base.html" %}
+{% comment %}
+This template is copied from the base templates to provide the friends
+photos link which is specific to social_project.
+
+NOTE: we don't extend that since it would extend itself and Django will
+crash.
+{% endcomment %}
+
+{% load i18n %}
+{% load group_tags %}
+
+{% block body_class %}Fotos{% endblock %}
+
+{% block subnav %}
+    {% if user.is_authenticated %}
+        <ul>
+            <li><a href="{% groupurl photos group %} ">{% trans "Últimas Fotos" %}</a></li>
+            <li><a href="{% groupurl photos_yours group %}">{% trans "Suas Fotos" %}</a></li>
+            <li><a href="{% url friends_photos %}">{% trans "Fotos dos amigos" %}</a></li>
+            <li><a href="{% groupurl photo_upload group %}">{% trans "Envie uma Foto" %}</a></li>
+        </ul>
+    {% else %}
+        &nbsp;
+    {% endif %}
+{% endblock %}

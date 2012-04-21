@@ -1,0 +1,24 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load account_tags %}
+{% load uni_form_tags %}
+
+{% block head_title %}{% trans "Segundo passo" %}{% endblock %}
+
+{% block body %}
+        <div>
+        <h1>Terceiro passo</h1>
+        <p><font color="red">{{ mensagem_erro }}</font></p>
+        <form class="signup uniForm" id="signup_form" method="post" action="/dev/cadastro/links/">
+            {% csrf_token %}
+            <fieldset class="inlineLabels">
+                {{ form|as_uni_form }}
+                <div class="form_block">
+                    <input type="submit" value="Salvar"/>
+                    <input type=button onClick="location.href='/dev/about/what_next/'" value='Pular'>
+                </div>
+            </fieldset>
+        </form>
+        </div>
+{% endblock %}
